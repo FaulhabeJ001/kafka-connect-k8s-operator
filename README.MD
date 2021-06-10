@@ -17,7 +17,7 @@ Testscenario:
     * create access-config (ConfigMap, modify if needed)
         * kubectl apply -f kc-access-config.yaml
     * create connect-operator (modify env-variables if needed)
-        * kubectl apply -f connect-operator-pod.yaml -n example-monitor-configmaps
+        * kubectl apply -f connect-operator-pod.yaml -n kc-monitor-configmaps
 * tests
     * curling the connect-rest-api with:
         * kubectl run -i --tty busyboxplus --image=radial/busyboxplus:curl --restart=Never -- /bin/sh
@@ -26,17 +26,17 @@ Testscenario:
         * kubectl apply -f connector-config-file-test2.yaml
     * check:
         * curl kafka.kafka.svc.cluster.local:8083/connectors
-        * kubectl logs connect-operator -n example-monitor-configmaps
+        * kubectl logs connect-operator -n kc-monitor-configmaps
     * delete connector-configs
         * kubectl delete -f connectzor-config-file-test1.yaml
         * kubectl delete -f connectzor-config-file-test2.yaml
     * check:
         * curl kafka.kafka.svc.cluster.local:8083/connectors
-        * kubectl logs connect-operator -n example-monitor-configmaps
+        * kubectl logs connect-operator -n kc-monitor-configmaps
 
 
 Helpful commands:
-* k delete po -n example-monitor-configmaps connect-operator
+* k delete po -n kc-monitor-configmaps connect-operator
 * k apply -f connect-operator-pod.yaml -n example-monitor-configmaps
 * k logs connect-operator -n example-monitor-configmaps
 * k describe po connect-operator -n example-monitor-configmaps
