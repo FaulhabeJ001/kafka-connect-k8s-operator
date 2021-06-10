@@ -20,10 +20,10 @@ Testscenario:
         * kubectl apply -f connect-operator-pod.yaml -n example-monitor-configmaps
 * tests
     * curling the connect-rest-api with:
-        * kubectl exec connect-operator -i -t -n example-monitor-configmaps -- /bin/bash
+        * kubectl run -i --tty busyboxplus --image=radial/busyboxplus:curl --restart=Never -- /bin/sh
     * create connector-configs
-        * kubectl apply -f connectzor-config-file-test1.yaml
-        * kubectl apply -f connectzor-config-file-test2.yaml
+        * kubectl apply -f connector-config-file-test1.yaml
+        * kubectl apply -f connector-config-file-test2.yaml
     * check:
         * curl kafka.kafka.svc.cluster.local:8083/connectors
         * kubectl logs connect-operator -n example-monitor-configmaps
