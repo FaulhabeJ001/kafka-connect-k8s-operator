@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: connect-operator
+  namespace: kc-monitor-configmaps
+spec:
+  containers:
+    - name: connect-operator
+      image: joergfa/kafka-connect-k8s-operator:0.0.1-SNAPSHOT
+      imagePullPolicy: Always
+      env:
+        - name: TASK_NUMBER1
+          value: "1"
+        - name: TASK_NUMBER2
+          value: "2"
+        - name: BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: kc-access
+              key: baseurl
+      volumeMounts:
+        - name: kc-access-vol
+          mountPath: /etc/config/connect-operator/access-config.properties
+          subPath: access-config.properties
+          readOnly: true
+  volumes:
+    - name: kc-access-vol
+      configMap:
+        name: kc-access
+  serviceAccountName: kc-monitor-configmaps-acc

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: connector-file-test1
+  labels:
+    destination: connect
+    enabled: "true"
+data:
+  connector-file-test1.json: |-
+    {
+      "name": "connector-file-test1",
+      "config": {
+        "name": "connector-file-test1",
+        "connector.class": "org.apache.kafka.connect.file.FileStreamSourceConnector",
+        "tasks.max": env.TASK_NUMBER1,
+        "file": "demo-file.txt",
+        "topic": $FILE_TOPIC1,
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "key.converter.schemas.enable": "true",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable": "true"
+      }
+    }

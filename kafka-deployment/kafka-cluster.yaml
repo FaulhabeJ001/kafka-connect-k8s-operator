@@ -1,0 +1,81 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kafka
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka
+  namespace: kafka
+  labels:
+    app: kafka
+spec:
+  ports:
+    - port: 2181
+      name: zookeeper
+    - port: 3030
+      name: landoopui
+    - port: 8081
+      name: restproxy
+    - port: 8082
+      name: schemaregistry
+    - port: 8083
+      name: kafkaconnect
+    - port: 9581
+      name: jmxport1
+    - port: 9582
+      name: jmxport2
+    - port: 9583
+      name: jmxport3
+    - port: 9584
+      name: jmxport4
+    - port: 9585
+      name: jmxport5
+    - port: 9092
+      name: kafkabroker
+  selector:
+    app: kafka
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kafka
+  labels:
+    app: kafka
+  namespace: kafka
+spec:
+  containers:
+    - name: kafka
+      image: landoop/fast-data-dev:cp3.3.0
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: ADV_HOST
+          value: "127.0.0.1"
+        - name: RUNTESTS
+          value: "0"
+      ports:
+        - containerPort: 2181
+          name: zookeeper
+        - containerPort: 3030
+          name: landoopui
+        - containerPort: 8081
+          name: restproxy
+        - containerPort: 8082
+          name: schemaregistry
+        - containerPort: 8083
+          name: kafkaconnect
+        - containerPort: 9581
+          name: jmxport1
+        - containerPort: 9582
+          name: jmxport2
+        - containerPort: 9583
+          name: jmxport3
+        - containerPort: 9584
+          name: jmxport4
+        - containerPort: 9585
+          name: jmxport5
+        - containerPort: 9092
+          name: kafkabroker
+
