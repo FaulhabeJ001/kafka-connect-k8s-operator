@@ -6,10 +6,10 @@ Modifications:
 - load_configs (operator.sh): write args from mounted volumes in tmp-file instead .properties file for getting rid of memory leak problems.
 
 Usage:
-* helm install <installation-name>> kafka-operator-helm --set baseurl=<kafka-connect-url>
-* mandatory: installation-name = "kc-operator-<spacename>" (convention)
-* mandatory: --set baseurl=<kafka-connect-url> (url to kafka-connect-cluster (in space))
-* optional: --set id=<alternative-id> (default id is installation-name)
+* helm install \<installation-name\> kafka-operator-helm --set baseurl=\<kafka-connect-url\>
+* mandatory: installation-name = "kc-operator-\<spacename\>" (convention)
+* mandatory: --set baseurl=\<kafka-connect-url\> (url to kafka-connect-cluster (in space))
+* optional: --set id=\<alternative-id\> (default id is installation-name)
 
 Testscenario:
 * before tests: sh ./startSetup.sh
@@ -35,4 +35,4 @@ Helpful commands:
 * kubectl logs kc-operator-test -n kc-operator-test
 * kubectl exec kc-operator-test -i -t -n kc-operator-test -- /bin/bash
 * kubectl run -i --tty busyboxplus --image=radial/busyboxplus:curl --restart=Never -- /bin/sh
-* kubectl port-forward kafka 3030 -n kafka (Minikube -> kafka-dashboard)
+* kubectl port-forward kafka 3030 -n kafka (Minikube: kafka-dashboard)
