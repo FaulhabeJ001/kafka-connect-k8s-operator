@@ -1,0 +1,9 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "kafka-operator-helm.rolename" . }}
+  namespace: {{ include "kafka-operator-helm.namespace" . }}
+rules:
+  - apiGroups: [""] # "" indicates the core API group
+    resources: ["configmaps"]
+    verbs: ["get", "watch", "list"]

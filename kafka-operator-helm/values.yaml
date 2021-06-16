@@ -1,0 +1,17 @@
+# Default values for kafka-operator-helm.
+
+# override baseurl!
+baseurl: kafka.kafka.svc.cluster.local:8083
+
+namespace:
+  create: true
+  prefix: kc-operator
+
+serviceAccount:
+  create: true
+
+
+
+
+
+

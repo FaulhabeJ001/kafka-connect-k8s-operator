@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "kafka-operator-helm.operatorName" . }}
+  namespace: {{ include "kafka-operator-helm.namespace" . }}
+spec:
+  containers:
+    - name: connect-operator
+      image: joergfa/kafka-connect-k8s-operator:0.0.1-SNAPSHOT
+      imagePullPolicy: Always
+      env:
+        - name: BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "kafka-operator-helm.configmapNameAccess" . }}
+              key: baseurl
+        - name: NAMESPACE
+          value: {{ include "kafka-operator-helm.namespace" . }}
+      volumeMounts:
+        - name: {{ include "kafka-operator-helm.volumeNameAccess" . }}
+          mountPath: /etc/config/connect-operator/access-config.properties
+          subPath: access-config.properties
+          readOnly: true
+  volumes:
+    - name: {{ include "kafka-operator-helm.volumeNameAccess" . }}
+      configMap:
+        name: {{ include "kafka-operator-helm.configmapNameAccess" . }}
+  serviceAccountName: {{ include "kafka-operator-helm.serviceAccountName" . }}

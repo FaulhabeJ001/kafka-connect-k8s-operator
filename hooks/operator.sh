@@ -2,7 +2,8 @@
 
 source $SHELL_OPERATOR_HOOKS_DIR/lib/common.sh
 
-BASE_URL=${BASE_URL:-11172.17.0.3:8083}
+BASE_URL=${BASE_URL}
+NAMESPACE=${NAMESPACE}
 
 # Converts the Java properties style files located
 # in /etc/config/connect-operator into a string of arguments that can be passed
@@ -90,6 +91,7 @@ function apply_connector() {
 hook::run() {
   if [ ! -z ${DEBUG+x} ]; then set -x; fi
   echo "XXX-BASE_URL: ${BASE_URL}"
+  echo "XXX-NAMESPACE: ${NAMESPACE}"
 
   [ -z ${JQ_ARGS_FROM_CONFIG_FILE} ] && load_configs
 
@@ -100,7 +102,7 @@ hook::run() {
 
   # so first we pull out the type of update we are getting from Kubernetes
   TYPE=$(jq -r .[0].type $BINDING_CONTEXT_PATH)
-  echo "XXX-type: $TYPE"
+  echo "XXX-TYPE: $TYPE"
 
     # A "Syncronization" Type event indicates we need to syncronize with the
   # current state of the resource, otherwise we'll get an "Event" type event.
