@@ -7,9 +7,9 @@ Modifications:
 
 Usage:
 * helm install \<installation-name\> kafka-operator-helm --set baseurl=\<kafka-connect-url\>
-* mandatory: installation-name = "kc-operator-\<spacename\>" (convention)
-* mandatory: --set baseurl=\<kafka-connect-url\> (url to kafka-connect-cluster (in space))
-* optional: --set id=\<alternative-id\> (default id is installation-name)
+    * mandatory: installation-name = "kc-operator-\<spacename\>" (convention)
+    * mandatory: --set baseurl=\<kafka-connect-url\> (url to kafka-connect-cluster (in space))
+    * optional: --set id=\<alternative-id\> (default id is installation-name)
 
 Testscenario:
 * before tests: sh ./startSetup.sh
