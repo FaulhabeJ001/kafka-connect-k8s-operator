@@ -101,14 +101,14 @@ hook::run() {
   # https://github.com/flant/shell-operator/blob/master/pkg/hook/binding_context/binding_context.go
 
   # so first we pull out the type of update we are getting from Kubernetes
+  # this is only correct if ALL types from all bindings are the same! But this should be
+  # no problem because we need only two types: "synchronization" once at the beginning and "event" afterwards
   TYPE=$(jq -r .[0].type $BINDING_CONTEXT_PATH)
   echo "XXX-TYPE: $TYPE"
 
-    # A "Syncronization" Type event indicates we need to syncronize with the
+  # A "Syncronization" Type event indicates we need to syncronize with the
   # current state of the resource, otherwise we'll get an "Event" type event.
   if [[ "$TYPE" == "Synchronization" ]]; then
-    # In the Syncronization phase, we maybe receive many object instances,
-    # so we pull out each one and process them indpendently
     KEYS=$(jq -c -r '.[0].objects | .[].object.data | keys | .[]' $BINDING_CONTEXT_PATH)
 
     for KEY in $KEYS; do
@@ -116,20 +116,19 @@ hook::run() {
    	  apply_connector "$CONFIG"
     done
   elif [[ "$TYPE" == "Event" ]]; then
-    # The EVENT variable will containe either Added, Updated, or Deleted in the
-    # case where TYPE == Event
-    EVENT=$(jq -r .[0].watchEvent $BINDING_CONTEXT_PATH)
-    DATA=$(jq -r '.[0].object.data' $BINDING_CONTEXT_PATH)
-    KEY=$(echo $DATA | jq -r -c 'keys | .[0]')
-    CONFIG=$(echo $DATA | jq -r -c ".\"$KEY\"")
+    LENGTH=$(jq '. | length' $BINDING_CONTEXT_PATH)
 
-    echo "XXX-EVENT: $EVENT"
-
-    if [[ "$EVENT" == "Deleted" ]]; then
-      delete_connector "$CONFIG"
-    else
-      apply_connector "$CONFIG"
-    fi
+    for ((i = 0 ; i < LENGTH ; i++ )); do
+        EVENT=$(jq -r .[${i}].watchEvent $BINDING_CONTEXT_PATH)
+        DATA=$(jq -r ".[$i].object.data" $BINDING_CONTEXT_PATH)
+        KEY=$(echo $DATA | jq -r -c "keys | .[0]")
+        CONFIG=$(echo $DATA | jq -r -c ".\"$KEY\"")
+        if [[ "$EVENT" == "Deleted" ]]; then
+          delete_connector "$CONFIG"
+        else
+          apply_connector "$CONFIG"
+        fi
+    done
   fi
   if [ ! -z ${DEBUG+x} ]; then set +x; fi
 }

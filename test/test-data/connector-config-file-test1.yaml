@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: connector-file-test1
-  namespace: test-connect-operator
+  namespace: kc
   labels:
     destination: connect
     enabled: "true"
